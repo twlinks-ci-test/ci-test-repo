@@ -18,8 +18,18 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          repository: saqimtiaz/ci-test-repo
 
       # Runs a single command using the runners shell
       - name: echo payload
         run: |
           echo "received '${{ github.event.client_payload }}'"
+
+      - name: modify site.json
+        run: |
+          echo "hello world" >> sites.json
+          cat sites.json
+          
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
