@@ -33,7 +33,7 @@ jobs:
                 repo: context.repo.repo,
                 state: 'all',
                 head: 'twlinks-ci-test:main'
-              }
+              });
               console.log(pullsReponse.data);
             } catch (e) {
               console.log(e)
