@@ -22,7 +22,10 @@ jobs:
                 owner: 'twlinks-ci-test',
                 repo: 'ci-test-repo'
               });
-              console.log(response);
+              //console.log(response);
+              for(const branch of response.data) {
+                console.log(branch.name);
+              }
             } catch (e) {
               console.log(e)
             }
