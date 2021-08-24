@@ -12,13 +12,13 @@ jobs:
   deploy:
     runs-on: ubuntu-18.04
     steps:
-      - name: Advance latest tag
+      - name: Get branches
         uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}          
           script: |
             try {
-              const response = await octokit.request('GET /repos/twlinks-ci-test/ci-test-repo/branches', {
+              const response = await github.request('GET /repos/twlinks-ci-test/ci-test-repo/branches', {
                 owner: 'twlinks-ci-test',
                 repo: 'ci-test-repo'
               });
