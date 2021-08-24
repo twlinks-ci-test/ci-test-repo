@@ -24,8 +24,17 @@ jobs:
               });
               //console.log(response);
               for(const branch of response.data) {
-                console.log(branch.name);
+                if(branch.name.startsWith("create-pull-request") {
+                  console.log(branch.name);
+                }
               }
+              const pullsReponse = await github.request('GET /repos/saqimtiaz/ci-test-repo/pulls', {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'all',
+                head: 'twlinks-ci-test:main'
+              }
+              console.log(pullsReponse.data);
             } catch (e) {
               console.log(e)
             }
