@@ -24,7 +24,7 @@ jobs:
               });
               //console.log(response);
               for(const branch of response.data) {
-                if(branch.name.startsWith("create-pull-request") {
+                if(branch.name.startsWith("create-pull-request")) {
                   console.log(branch.name);
                 }
               }
