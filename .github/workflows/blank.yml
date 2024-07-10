@@ -10,7 +10,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - run: gh pr comment "$NUMBER" -b "Please sign the CLA"
+      - run: gh pr comment "$NUMBER" -b "@$USER Please sign the CLA"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
