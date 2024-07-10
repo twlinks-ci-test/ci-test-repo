@@ -10,13 +10,10 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: main
-        sparse-checkout: |
-          licenses/cla-individual.md
-        sparse-checkout-cone-mode: false
-    - run: gh pr comment "$NUMBER" -b "@$USER Please sign the CLA"
+    - run: |
+        if ! curl -s https://raw.githubusercontent.com/Jermolene/TiddlyWiki5/tiddlywiki-com/licenses/cla-individual.md | grep -o "@$USER,"; then
+          gh pr comment "$NUMBER" -b "@$USER Please sign the CLA"
+        fi
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
