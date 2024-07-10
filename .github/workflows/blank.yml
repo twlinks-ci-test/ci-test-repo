@@ -12,7 +12,10 @@ jobs:
     steps:
     - run: |
         if ! curl -s https://raw.githubusercontent.com/Jermolene/TiddlyWiki5/tiddlywiki-com/licenses/cla-individual.md | grep -o "@$USER,"; then
+          echo "CLA not signed"
           gh pr comment "$NUMBER" -b "@$USER Please sign the CLA"
+        else
+          echo "CLA already signed"
         fi
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
