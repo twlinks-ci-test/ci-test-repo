@@ -2,7 +2,6 @@ name: Check CLA Signature
 on:
   pull_request:
     types:
-      - reopened
       - opened
 jobs:
   check_cla:
@@ -11,7 +10,7 @@ jobs:
       pull-requests: write
     steps:
     - run: |
-        if ! curl -s https://raw.githubusercontent.com/Jermolene/TiddlyWiki5/tiddlywiki-com/licenses/cla-individual.md | grep -o "@$USERsss,"; then
+        if ! curl -s https://raw.githubusercontent.com/Jermolene/TiddlyWiki5/tiddlywiki-com/licenses/cla-individual.md | grep -o "@$USER,"; then
           echo "CLA not signed"
           gh pr comment "$NUMBER" -b "@$USER It appears that this is your first contribution to the project, welcome.
           
