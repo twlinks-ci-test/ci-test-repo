@@ -10,10 +10,15 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - run: gh pr comment "$NUMBER" -b "@$USER Please sign the CLA"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          NUMBER: ${{ github.event.pull_request.number }}
-          USER: ${{ github.actor }}
+    - uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          README.md
+        sparse-checkout-cone-mode: false
+    - run: gh pr comment "$NUMBER" -b "@$USER Please sign the CLA"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+        NUMBER: ${{ github.event.pull_request.number }}
+        USER: ${{ github.actor }}
 
