@@ -1,4 +1,4 @@
-name: Label issues
+name: Check CLA Signature
 on:
   pull_request:
     types:
@@ -14,7 +14,7 @@ jobs:
       with:
         ref: main
         sparse-checkout: |
-          README.md
+          licenses/cla-individual.md
         sparse-checkout-cone-mode: false
     - run: gh pr comment "$NUMBER" -b "@$USER Please sign the CLA"
       env:
