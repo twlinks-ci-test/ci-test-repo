@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: ${{ (github.event.pull_request.user.login != github.repository_owner) || github.event.repository.name != 'TiddlyWiki5' }}
+    if: ${{ (github.event.pull_request.user.login != github.repository_owner) }}
     steps:
     - run: |
         if ! curl -s https://raw.githubusercontent.com/Jermolene/TiddlyWiki5/tiddlywiki-com/licenses/cla-individual.md | grep -o "@$USER,"; then
