@@ -62,7 +62,7 @@ jobs:
           
     - name: Comment open PRs by the same author
       run: |
-        prs=($(echo $PRNUMBERS | tr "," "\n"))  
+        prs=($(echo ${{ steps.list-prs.outputs.result }} | tr "," "\n"))  
   
         for number in "${prs[@]}"  
         do  
@@ -70,5 +70,4 @@ jobs:
           gh pr comment "$number" -b "**$AUTHOR** has signed the Contributor License Agreement (see [contributing.md](https://github.com/Jermolene/TiddlyWiki5/blob/master/contributing.md))"
         done     
     env:
-      PRNUMBERS: ${{ steps.list-prs.outputs.result }}
       AUTHOR: ${{ context.payload.pull_request.user.login }}
