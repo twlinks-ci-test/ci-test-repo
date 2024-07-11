@@ -34,19 +34,18 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    outputs:
-        pr-numbers: ${{ steps.list-prs.outputs.result }}
     steps:
     - name: List open PRs by user
       id: list-prs
       uses: actions/github-script@v6
       with:
+        result-encoding: string
         script: |
           const owner = context.repo.owner,
             repo = context.repo.repo,
             author = context.payload.pull_request.user.login;
 
-          const { data: pullRequests } = await github.pulls.list({
+          const { data: pullRequests } = await github.rest.pulls.list({
             owner: owner,
             repo: repo,
             state: 'open',
