@@ -8,7 +8,7 @@ on:
       - 'licenses/cla-individual.md'
 jobs:
   check_cla:
-    if: ${{ github.event.pull_request.user.login != github.repository_owner && github.event.repository.name == 'TiddlyWiki5' }}
+    if: ${{ (github.event.pull_request.user.login != github.repository_owner) && github.event.repository.name == 'TiddlyWiki5' }}
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
