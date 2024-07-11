@@ -59,7 +59,7 @@ jobs:
 
           console.log(`Open pull requests by ${author}:${prNumbers}`);
 
-          return prNumbers.join(',');
+          return prNumbers;
     - name: Comment open PRs
       run: |
         echo "The PR numbers are: ${{ steps.list-prs.outputs['pr-numbers'] }}"      
