@@ -8,6 +8,12 @@ on:
     paths:
       - 'licenses/cla-individual.md'
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_REPO: ${{ github.repository }}
+  NUMBER: ${{ github.event.pull_request.number }}
+  USER: ${{ github.actor }}
+
 jobs:
   check-signature-branch:
     if: (github.event.pull_request.merged != true) && (github.event.pull_request.user.login != github.repository_owner)
@@ -21,9 +27,41 @@ jobs:
           gh pr comment "$NUMBER" -b "@$USER Signatures to the CLA must target the 'tiddlywiki-com' branch."
         fi
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GH_REPO: ${{ github.repository }}
-        NUMBER: ${{ github.event.pull_request.number }}
-        USER: ${{ github.actor }}
         BRANCH: ${{ github.event.pull_request.base.ref }}
+        
+  cla-signed:
+    if: (github.event.pull_request.merged == true) && (github.event.pull_request.user.login != github.repository_owner)
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    outputs:
+        pr-numbers: ${{ steps.list-prs.outputs.result }}
+    steps:
+    - name: List open PRs by user
+      id: list-prs
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const owner = context.repo.owner,
+            repo = context.repo.repo,
+            author = context.payload.pull_request.user.login;
+
+          const { data: pullRequests } = await github.pulls.list({
+            owner: owner,
+            repo: repo,
+            state: 'open',
+            sort: 'created',
+            direction: 'desc',
+            per_page: 100
+          });
+
+          const userPullRequests = pullRequests.filter(pr => pr.user.login === author);
+          const prNumbers = userPullRequests.map(pr => pr.number).join(',');
+
+          console.log(`Open pull requests by ${author}:${prNumbers}`);
+
+          return prNumbers.join(',');
+    - name: Comment open PRs
+      run: |
+        echo "The PR numbers are: ${{ steps.list-prs.outputs['pr-numbers'] }}"      
       
