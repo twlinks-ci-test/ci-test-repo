@@ -15,6 +15,7 @@ env:
   USER: ${{ github.actor }}
 
 jobs:
+  # check if PRs updating the CLA are targetting the tiddlywiki-com branch
   check-signature-branch:
     if: (github.event.pull_request.merged != true) && (github.event.pull_request.user.login != github.repository_owner)
     runs-on: ubuntu-latest
@@ -28,7 +29,8 @@ jobs:
         fi
       env:
         BRANCH: ${{ github.event.pull_request.base.ref }}
-        
+
+  # leave a comment on each open PR by a given author when their signature is added to the CLA
   cla-signed:
     if: (github.event.pull_request.merged == true) && (github.event.pull_request.user.login != github.repository_owner)
     runs-on: ubuntu-latest
@@ -53,14 +55,20 @@ jobs:
             direction: 'desc',
             per_page: 100
           });
-
-          const userPullRequests = pullRequests.filter(pr => pr.user.login === author);
-          const prNumbers = userPullRequests.map(pr => pr.number).join(',');
-
+          const userPullRequests = pullRequests.filter(pr => pr.user.login === author),
+            prNumbers = userPullRequests.map(pr => pr.number).join(',');
           console.log(`Open pull requests by ${author}:${prNumbers}`);
-
           return prNumbers;
-    - name: Comment open PRs
+          
+    - name: Comment open PRs by the same author
       run: |
-        echo "The PR numbers are: ${{ steps.list-prs.outputs.result }}"      
-      
+        prs=($(echo $PRNUMBERS | tr "," "\n"))  
+  
+        for number in "${prs[@]}"  
+        do  
+          #echo $number
+          gh pr comment "$number" -b "**$AUTHOR** has signed the Contributor License Agreement (see [contributing.md](https://github.com/Jermolene/TiddlyWiki5/blob/master/contributing.md))"
+        done     
+    env:
+      PRNUMBERS: ${{ steps.list-prs.outputs.result }}
+      AUTHOR: ${{ context.payload.pull_request.user.login }}
