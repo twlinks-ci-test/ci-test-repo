@@ -18,7 +18,7 @@ jobs:
     - run: |
         if ! $BRANCH == "tiddlywiki-com"; then
           echo "This CLA signature targets the wrong branch"
-          gh pr comment "$NUMBER" -b "@$USER Signatures to the CLA must target the `tiddlywiki-com` branch."
+          gh pr comment "$NUMBER" -b "@$USER Signatures to the CLA must target the 'tiddlywiki-com' branch."
         fi
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
